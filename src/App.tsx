@@ -1,12 +1,9 @@
-import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/react';
-import { home as homeIcon, settings as settingsIcon} from 'ionicons/icons'
+import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { Redirect, Route } from 'react-router-dom';
-import HomePage from './Pages/HomePage';
-import SettingsPage from './Pages/SettingsPage';
-import EntryPage from './Pages/EntryPage';
+import {  Redirect, Route } from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import { useState } from 'react';
+import AppTabs from './AppTabs';
 
 const App: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -14,33 +11,15 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/login" >
-              <LoginPage loggedIn={loggedIn} onLogin={() => setLoggedIn(true)}/>
-            </Route>
-            <Route exact path="/entries" >
-              { loggedIn ? <HomePage /> : <Redirect to="/login"/> }
-            </Route>
-            <Route exact path="/entries/:id" >
-              <EntryPage />
-            </Route>
-            <Route exact path="/settings" >
-              <SettingsPage />
-            </Route>
-            <Redirect exact path='/' to="/entries"/>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href="/entries">
-              <IonIcon icon={homeIcon}/>
-              <IonLabel>Home</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="settings" href="/settings">
-              <IonIcon icon={settingsIcon}/>
-              <IonLabel>Settings</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+        <IonRouterOutlet>
+          <Redirect exact path='/' to="/login"/>
+          <Route exact path="/login" >
+            <LoginPage loggedIn={loggedIn} onLogin={() => setLoggedIn(true)}/>
+          </Route>
+          <Route path="/my">
+            <AppTabs loggedIn={loggedIn}/>
+          </Route>
+        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );
