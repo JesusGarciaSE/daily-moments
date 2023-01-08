@@ -5,15 +5,22 @@ import { Redirect, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import SettingsPage from './Pages/SettingsPage';
 import EntryPage from './Pages/EntryPage';
+import LoginPage from './Pages/LoginPage';
+import { useState } from 'react';
 
 const App: React.FC = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  console.log(`rending App with loggedIn=${loggedIn}`);
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
+            <Route exact path="/login" >
+              <LoginPage loggedIn={loggedIn} onLogin={() => setLoggedIn(true)}/>
+            </Route>
             <Route exact path="/entries" >
-              <HomePage />
+              { loggedIn ? <HomePage /> : <Redirect to="/login"/> }
             </Route>
             <Route exact path="/entries/:id" >
               <EntryPage />
