@@ -1,6 +1,8 @@
 import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Redirect } from 'react-router';
 import { useAuth } from '../Auth';
+import { auth } from '../firebase'
 
 interface Props {
   onLogin: () => void;
@@ -8,6 +10,12 @@ interface Props {
 
 const LoginPage: React.FC<Props> = ({ onLogin }) => {
   const {loggedIn} = useAuth();
+
+  const handleLogin = async () => {
+    const crednetial = signInWithEmailAndPassword(auth, 'test1@example.org', 'test1234');
+    console.log(crednetial);
+  }
+
   if(loggedIn) {
     return <Redirect to="/my/entries"/>;
   }
