@@ -5,11 +5,7 @@ import { Redirect } from 'react-router';
 import { useAuth } from '../Auth';
 import { auth } from '../firebase'
 
-interface Props {
-  onLogin: () => void;
-}
-
-const LoginPage: React.FC<Props> = ({ onLogin }) => {
+const LoginPage: React.FC = () => {
   const {loggedIn} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,9 +15,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     try {
       setStatus({loading: true, error: false})
       const crednetial = await signInWithEmailAndPassword(auth, email, password);
-      setStatus({loading: false, error: false})
       console.log('credential:', crednetial);
-      onLogin();
     } catch(error) {
       console.log('error:', error)
       setStatus({loading: false, error: true})
