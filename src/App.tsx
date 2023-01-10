@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import AppTabs from './AppTabs';
 import NotFoundPage from './Pages/NotFoundPage';
 import { auth } from './firebase'
+import RegisterPage from './Pages/RegisterPage';
 
 
 const App: React.FC = () => {
@@ -29,6 +30,9 @@ const App: React.FC = () => {
             <Redirect exact path='/' to="/login"/>
             <Route exact path="/login" >
               <LoginPage />
+            </Route>
+            <Route exact path="/register" >
+              <RegisterPage />
             </Route>
             <Route path="/my">
               <AppTabs />
