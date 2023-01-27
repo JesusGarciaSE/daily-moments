@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { firestore } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
+import { Entry, toEntry } from '../models';
 
 interface RouteParams {
   id: string;
@@ -10,16 +11,11 @@ interface RouteParams {
 
 const EntryPage: React.FC = () => {
   const { id } = useParams<RouteParams>();
-  const [entry, setEntry] = useState<any>();
+  const [entry, setEntry] = useState<Entry>();
   useEffect(() => {
     const docRef = doc(firestore, "entries", id);
-    getDoc(docRef).then((doc) => {
-      console.log(doc);
-      const entry = {id: doc.id, ...doc.data() }
-      setEntry(entry);
-    })
-  }, [id])
-
+    getDoc(docRef).then((doc) => { setEntry(toEntry(doc)); }) }
+  , [id])
   return (
     <IonPage>
       <IonHeader>

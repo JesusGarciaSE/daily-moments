@@ -2,19 +2,14 @@ import { IonContent, IonHeader, IonItem, IonList, IonPage, IonTitle, IonToolbar 
 import { useEffect, useState } from 'react';
 import { firestore } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { Entry, toEntry } from '../models';
 
 const HomePage: React.FC = () => {
 
-  const [entries, setEntries] = useState([])
+  const [entries, setEntries] = useState<Entry[]>([])
   useEffect(() => {
     const entriesRef = collection(firestore, 'entries');
-    getDocs(entriesRef).then((snapshot) => {
-      const entries = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setEntries(entries);
-    })
+    getDocs(entriesRef).then(({ docs }) => { setEntries(docs.map(toEntry)); })
   }, [])
   return (
     <IonPage>
