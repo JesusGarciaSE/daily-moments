@@ -5,6 +5,7 @@ import { Redirect, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import SettingsPage from './Pages/SettingsPage';
 import EntryPage from './Pages/EntryPage';
+import AddEntryPage from './Pages/AddEntryPage';
 import { useAuth } from './Auth';
 
 
@@ -22,6 +23,9 @@ const AppTabs: React.FC = () => {
           </Route>
           <Route exact path="/my/entries/:id" >
             <EntryPage />
+          </Route>
+          <Route exact path="/my/entries/add" >
+            <AddEntryPage />
           </Route>
           <Route exact path="/my/settings" >
             <SettingsPage />
