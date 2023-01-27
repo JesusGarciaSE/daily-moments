@@ -2,7 +2,7 @@ import { IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonList,
 import { add as addIcon } from 'ionicons/icons'
 import { useEffect, useState } from 'react';
 import { firestore } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { Entry, toEntry } from '../models';
 import { useAuth } from '../Auth';
 
@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
 
     const entriesRef = collection(firestore, `users/${userId}/entries`);
-    getDocs(entriesRef).then(({ docs }) => { setEntries(docs.map(toEntry)); })
+    return onSnapshot(entriesRef, ({ docs }) => { setEntries(docs.map(toEntry)); });
   }, [userId])
   return (
     <IonPage>
