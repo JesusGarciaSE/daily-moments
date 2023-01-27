@@ -4,18 +4,20 @@ import { firestore } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
 import { Entry, toEntry } from '../models';
+import { useAuth } from '../Auth';
 
 interface RouteParams {
   id: string;
 }
 
 const EntryPage: React.FC = () => {
+  const { userId } = useAuth();
   const { id } = useParams<RouteParams>();
   const [entry, setEntry] = useState<Entry>();
   useEffect(() => {
-    const docRef = doc(firestore, "entries", id);
+    const docRef = doc(firestore, `users/${userId}/entries`, id);
     getDoc(docRef).then((doc) => { setEntry(toEntry(doc)); }) }
-  , [id])
+  , [userId, id])
   return (
     <IonPage>
       <IonHeader>
