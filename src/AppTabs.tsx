@@ -21,7 +21,7 @@ const AppTabs: React.FC = () => {
           <Route exact path="/my/entries" >
             <HomePage />
           </Route>
-          <Route exact path="/my/entries/:id" >
+          <Route exact path="/my/entries/view/:id" >
             <EntryPage />
           </Route>
           <Route exact path="/my/entries/add" >
