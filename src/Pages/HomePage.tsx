@@ -1,8 +1,8 @@
-import { IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { add as addIcon } from 'ionicons/icons'
 import { useEffect, useState } from 'react';
 import { firestore } from '../firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { Entry, toEntry } from '../models';
 import { useAuth } from '../Auth';
 
@@ -13,7 +13,6 @@ const HomePage: React.FC = () => {
   useEffect(() => {
 
     const entriesRef = collection(firestore, `users/${userId}/entries`);
-    return onSnapshot(entriesRef, ({ docs }) => { setEntries(docs.map(toEntry)); });
   }, [userId])
   return (
     <IonPage>
@@ -26,7 +25,12 @@ const HomePage: React.FC = () => {
         <IonList>
           {
             entries.map((entry) => 
-              <IonItem button key={entry.id} routerLink={`/my/entries/view/${entry.id}`}>{entry.title}</IonItem>
+              <IonItem button key={entry.id} routerLink={`/my/entries/view/${entry.id}`}>
+                <IonLabel>
+                  <h2>{entry.date}</h2>
+                  <h3>{entry.title}</h3>
+                </IonLabel>
+              </IonItem>
             )
           }
         </IonList>
