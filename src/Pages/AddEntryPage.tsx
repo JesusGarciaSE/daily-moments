@@ -1,5 +1,5 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../Auth';
 import { firestore } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
@@ -13,11 +13,18 @@ const AddEntryPage: React.FC = () => {
   const [pictureUrl, setPictureUrl] = useState('/assets/placeholder.png');
   const [description, setDescription] = useState('');
 
+  useEffect(() => {
+    return () => {
+      if(pictureUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(pictureUrl);
+      }
+    }
+  }, [pictureUrl])
+
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
    if(event.target.files.length > 0) {
     const file = event.target.files.item(0);
     const pictureURL = URL.createObjectURL(file);
-    console.log('created URL:', pictureURL);
     setPictureUrl(pictureURL);
    }
   }
