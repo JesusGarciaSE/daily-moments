@@ -10,7 +10,17 @@ const AddEntryPage: React.FC = () => {
   const history = useHistory();
   const [date, setDate] = useState('');
   const [title, setTitle] = useState('');
+  const [pictureUrl, setPictureUrl] = useState('/assets/placeholder.png');
   const [description, setDescription] = useState('');
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   if(event.target.files.length > 0) {
+    const file = event.target.files.item(0);
+    const pictureURL = URL.createObjectURL(file);
+    console.log('created URL:', pictureURL);
+    setPictureUrl(pictureURL);
+   }
+  }
 
   const handleSubmit = async() => {
     const entriesRef = collection(firestore, `users/${userId}/entries`);
@@ -39,6 +49,12 @@ const AddEntryPage: React.FC = () => {
           <IonItem>
             <IonLabel position="stacked">Title</IonLabel>
             <IonInput value={title} onIonChange={(event) => setTitle(event.detail.value)} />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Picture</IonLabel> <br />
+            <input type="file" accept="image/*" 
+              onChange={onFileChange}/>
+            <img src={pictureUrl} alt=""/>
           </IonItem>
           <IonItem>
             <IonLabel position="stacked">Description</IonLabel>
