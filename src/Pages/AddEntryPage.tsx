@@ -8,12 +8,13 @@ import { useHistory } from 'react-router';
 const AddEntryPage: React.FC = () => {
   const { userId } = useAuth();
   const history = useHistory();
+  const [date, setDate] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = async() => {
     const entriesRef = collection(firestore, `users/${userId}/entries`);
-    const entryData = { title, description };
+    const entryData = { date, title, description };
     const entryId = await addDoc(entriesRef, entryData);
     console.log('saved:', entryId.id);
     history.goBack()
@@ -31,6 +32,10 @@ const AddEntryPage: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <IonList>
+          <IonItem>
+            <IonLabel position="stacked">Date</IonLabel>
+            <IonInput type="date" value={date} onIonChange={(event) => setDate(event.detail.value)} />
+          </IonItem>
           <IonItem>
             <IonLabel position="stacked">Title</IonLabel>
             <IonInput value={title} onIonChange={(event) => setTitle(event.detail.value)} />
