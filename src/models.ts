@@ -2,6 +2,7 @@ import { DocumentSnapshot } from "firebase/firestore";
 
 export interface Entry {
     id: string;
+    date: string;
     title: string;
     description: string;
 }
