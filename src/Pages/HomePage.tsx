@@ -11,8 +11,9 @@ const HomePage: React.FC = () => {
 
   const [entries, setEntries] = useState<Entry[]>([])
   useEffect(() => {
-
     const entriesRef = collection(firestore, `users/${userId}/entries`);
+    const q = query(entriesRef, orderBy("date"))
+    onSnapshot(q, ({docs}) => setEntries(docs.map(toEntry)))
   }, [userId])
   return (
     <IonPage>
