@@ -1,9 +1,10 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../Auth';
-import { firestore } from '../firebase';
+import { firestore, storage } from '../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { useHistory } from 'react-router';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const AddEntryPage: React.FC = () => {
   const { userId } = useAuth();
@@ -30,9 +31,22 @@ const AddEntryPage: React.FC = () => {
    }
   }
 
+  async function savePicture(blobUrl, userId) {
+    const pictureRef = ref(storage, `/users/${userId}/pictures/${Date.now()}`)
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+    const snapshot = await uploadBytes(pictureRef, blob);
+    const url = await getDownloadURL(snapshot.ref);
+    console.log('save picture:', url);
+    return url;
+  }
+
   const handleSubmit = async() => {
     const entriesRef = collection(firestore, `users/${userId}/entries`);
-    const entryData = { date, title, description };
+    const entryData = { date, title, pictureUrl, description };
+    if(pictureUrl.startsWith('blob:')) {
+      entryData.pictureUrl = await savePicture(pictureUrl, userId);
+    }
     const entryId = await addDoc(entriesRef, entryData);
     console.log('saved:', entryId.id);
     history.goBack()
